@@ -1,0 +1,506 @@
+{
+  "info": {
+    "_postman_id": "lms-api-collection",
+    "name": "LMS Platform API",
+    "description": "Complete LMS API Testing Collection - Web Development & Assessment Management",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "12345"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Student\",\n  \"email\": \"newstudent@lms.test\",\n  \"password\": \"password123\",\n  \"password_confirmation\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/register",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"token\", jsonData.data.token);",
+                  "    pm.environment.set(\"user_id\", jsonData.data.user.id);",
+                  "    pm.test(\"Token saved to environment\", function() {",
+                  "        pm.expect(pm.environment.get(\"token\")).to.not.be.empty;",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"student1@lms.test\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login as Lecturer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"lecturer_token\", jsonData.data.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"lecturer@lms.test\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Me (Get Current User)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/me",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "me"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/logout",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Courses",
+      "item": [
+        {
+          "name": "Get All Courses",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/courses",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "courses"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Course by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/courses/{{course_id}}",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "courses", "{{course_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Course Students",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/courses/{{course_id}}/students",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "courses", "{{course_id}}", "students"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Course Activities",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/courses/{{course_id}}/activities",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "courses", "{{course_id}}", "activities"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Course Enrollments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/courses/{{course_id}}/enrollments",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "courses", "{{course_id}}", "enrollments"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Enrollments",
+      "item": [
+        {
+          "name": "Get My Enrollments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/enrollments",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "enrollments"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Enrollment Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/enrollments/{{enrollment_id}}",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "enrollments", "{{enrollment_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Enrollment Progress",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/enrollments/{{enrollment_id}}/progress",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "enrollments", "{{enrollment_id}}", "progress"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Assessments",
+      "item": [
+        {
+          "name": "Get All Assessments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/assessments?course_id=1",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "assessments"],
+              "query": [
+                {
+                  "key": "course_id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Assessment Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/assessments/{{assessment_id}}",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "assessments", "{{assessment_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Start Exam Attempt",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"attempt_id\", jsonData.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/assessments/1/start-attempt",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "assessments", "1", "start-attempt"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Assessment Attempt",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"answers\": [\n    {\n      \"question_id\": 1,\n      \"selected_option_id\": 1,\n      \"text_answer\": null\n    },\n    {\n      \"question_id\": 2,\n      \"selected_option_id\": 4,\n      \"text_answer\": null\n    },\n    {\n      \"question_id\": 3,\n      \"selected_option_id\": 7,\n      \"text_answer\": null\n    },\n    {\n      \"question_id\": 4,\n      \"selected_option_id\": 10,\n      \"text_answer\": null\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/exam-attempts/{{attempt_id}}/submit",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "exam-attempts", "{{attempt_id}}", "submit"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Assessment Attempts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/assessments/1/my-attempts",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "assessments", "1", "my-attempts"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "API Health",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/health",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "course_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "enrollment_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "assessment_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "attempt_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "lecturer_token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
